@@ -79,7 +79,7 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-base text-slate-100 tracking-tight leading-tight">Book Hunter</h1>
-                    <p class="text-[11px] text-slate-400">Offline Edition (v1.2.14)</p>
+                    <p class="text-[11px] text-slate-400">Offline Edition (v1.2.15)</p>
                 </div>
             </div>
             <div class="flex items-center space-x-2">
@@ -307,12 +307,12 @@
                             </div>
                             <div>
                                 <h3 class="text-xs font-semibold text-slate-200">Import CSV Spreadsheet</h3>
-                                <p class="text-[10px] text-indigo-300/80">Upload any CSV (Title, Author, ISBN, MaxPrice, Label/Category)</p>
+                                <p class="text-[10px] text-indigo-300/80">Upload any CSV (Title, Author, ISBN, Label/Category)</p>
                             </div>
                         </div>
                         <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Ready</span>
                     </div>
-                    <p class="text-[11px] text-slate-400">Supports standard CSV spreadsheets with columns like Title, Author, ISBN, MaxPrice, and Label or Category (asynchronously queries Open Library API for work lookup):</p>
+                    <p class="text-[11px] text-slate-400">Supports standard CSV spreadsheets with columns like Title, Author, ISBN, and Label or Category (asynchronously queries Open Library API for work lookup):</p>
                     <div class="grid grid-cols-2 gap-2">
                         <label class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-medium transition flex items-center justify-center space-x-1.5 cursor-pointer shadow-lg shadow-indigo-600/20">
                             <i class="fa-solid fa-file-arrow-up"></i>
@@ -381,7 +381,7 @@
 
                 <!-- Version Footer -->
                 <div class="text-center pt-2 pb-1">
-                    <p class="text-[11px] text-slate-500 font-mono">Book Hunter v1.2.14 (Offline Enabled)</p>
+                    <p class="text-[11px] text-slate-500 font-mono">Book Hunter v1.2.15 (Offline Enabled)</p>
                 </div>
             </section>
         </main>
@@ -430,17 +430,11 @@
                     <label class="block text-xs font-medium text-slate-300 mb-1">ISBN (Optional)</label>
                     <input type="text" id="form-isbn" placeholder="e.g., 9780547928227" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-100 placeholder-slate-600 font-mono focus:outline-none focus:border-brand-500">
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Max Price ($)</label>
-                        <input type="number" step="0.5" id="form-price" placeholder="e.g., 5.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-brand-500">
-                    </div>
-                    <div class="relative">
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Label</label>
-                        <input type="text" id="form-label" autocomplete="off" oninput="app.handleLabelInput(this.value)" placeholder="e.g. Sci-Fi" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-brand-500">
-                        <!-- Custom Inline Suggestion Dropdown -->
-                        <div id="label-suggestions-dropdown" class="absolute left-0 right-0 top-full mt-1 bg-slate-950 border border-slate-800 rounded-xl shadow-2xl z-50 hidden max-h-36 overflow-y-auto divide-y divide-slate-900"></div>
-                    </div>
+                <div class="relative">
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Label</label>
+                    <input type="text" id="form-label" autocomplete="off" oninput="app.handleLabelInput(this.value)" placeholder="e.g. Sci-Fi" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-brand-500">
+                    <!-- Custom Inline Suggestion Dropdown -->
+                    <div id="label-suggestions-dropdown" class="absolute left-0 right-0 top-full mt-1 bg-slate-950 border border-slate-800 rounded-xl shadow-2xl z-50 hidden max-h-36 overflow-y-auto divide-y divide-slate-900"></div>
                 </div>
                 <div class="pt-2">
                     <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-semibold shadow-lg shadow-brand-600/30 transition">
@@ -544,7 +538,6 @@
                                     <th class="py-3 px-4 font-semibold">Title</th>
                                     <th class="py-3 px-4 font-semibold">Author</th>
                                     <th class="py-3 px-4 font-semibold font-mono">ISBN</th>
-                                    <th class="py-3 px-4 font-semibold">Max Price</th>
                                     <th class="py-3 px-4 font-semibold">Label</th>
                                     <th class="py-3 px-4 font-semibold text-right">Actions</th>
                                 </tr>
@@ -569,7 +562,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 const swCode = `
-                    const CACHE_NAME = 'bookhunter-offline-v1.2.14';
+                    const CACHE_NAME = 'bookhunter-offline-v1.2.15';
                     const ASSETS = [location.href];
                     self.addEventListener('install', e => {
                         e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
@@ -606,13 +599,19 @@
 
         class BookHunterApp {
             constructor() {
-                this.toBuyList = JSON.parse(localStorage.getItem('bh_tobuy_list')) || [
-                    { id: '1', title: 'Dune', author: 'Frank Herbert', isbn: '9780441172719', maxPrice: '5.00', label: 'Sci-Fi' },
-                    { id: '2', title: 'Atomic Habits', author: 'James Clear', isbn: '9780735211292', maxPrice: '8.00', label: 'Self-Help' },
-                    { id: '3', title: 'The Hobbit', author: 'J.R.R. Tolkien', isbn: '9780547928227', maxPrice: '6.00', label: 'Fantasy' },
-                    { id: '4', title: 'Project Hail Mary', author: 'Andy Weir', isbn: '9780593135208', maxPrice: '10.00', label: 'Sci-Fi' },
-                    { id: '5', title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', isbn: '9780374533557', maxPrice: '7.50', label: 'Psychology' }
+                let rawList = JSON.parse(localStorage.getItem('bh_tobuy_list')) || [
+                    { id: '1', title: 'Dune', author: 'Frank Herbert', isbn: '9780441172719', label: 'Sci-Fi' },
+                    { id: '2', title: 'Atomic Habits', author: 'James Clear', isbn: '9780735211292', label: 'Self-Help' },
+                    { id: '3', title: 'The Hobbit', author: 'J.R.R. Tolkien', isbn: '9780547928227', label: 'Fantasy' },
+                    { id: '4', title: 'Project Hail Mary', author: 'Andy Weir', isbn: '9780593135208', label: 'Sci-Fi' },
+                    { id: '5', title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', isbn: '9780374533557', label: 'Psychology' }
                 ];
+                // Clean up any legacy maxPrice fields from existing localStorage data seamlessly
+                this.toBuyList = rawList.map(b => {
+                    const { maxPrice, ...rest } = b;
+                    return rest;
+                });
+
                 this.scanHistory = JSON.parse(localStorage.getItem('bh_scan_history')) || [];
                 this.stats = JSON.parse(localStorage.getItem('bh_stats')) || { scanned: 0, matches: 0 };
                 this.mediaStream = null;
@@ -796,7 +795,6 @@
                                             ${item.isMatch ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-medium shrink-0">Match!</span>' : ''}
                                         </div>
                                         <p class="text-[11px] text-slate-400 truncate">${item.author}</p>
-                                        ${item.isMatch && item.matchedBook.maxPrice ? `<p class="text-[10px] text-emerald-300 mt-0.5">Target Max Price: $${item.matchedBook.maxPrice}</p>` : ''}
                                     </div>
                                 </div>
                                 ${!item.isMatch ? `<button onclick="app.addScannedToList('${item.title.replace(/'/g, "\\'")}', '${item.author.replace(/'/g, "\\'")}', '')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-[10px] font-medium border border-slate-700 transition shrink-0">+ Add</button>` : `<span class="text-xs text-emerald-400 shrink-0 font-medium"><i class="fa-solid fa-circle-check mr-1"></i>On List</span>`}
@@ -872,7 +870,6 @@
                                     <p class="text-[11px] text-slate-400 truncate">${book.author}</p>
                                     <div class="flex items-center space-x-1.5 mt-1 flex-wrap gap-y-1">
                                         ${book.isbn ? `<span class="text-[9px] font-mono text-slate-500 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800">ISBN: ${book.isbn}</span>` : ''}
-                                        ${book.maxPrice ? `<span class="text-[9px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">Max: $${book.maxPrice}</span>` : ''}
                                         ${book.label ? `<span class="text-[9px] text-indigo-300 bg-indigo-950/80 px-1.5 py-0.5 rounded border border-indigo-900/60 font-medium"><i class="fa-solid fa-tag text-[8px] mr-1"></i>${book.label}</span>` : ''}
                                         ${book.workKey ? `<span class="text-[9px] text-purple-300 bg-purple-950/80 px-1.5 py-0.5 rounded border border-purple-900/60 font-mono">Work-Linked</span>` : ''}
                                     </div>
@@ -971,7 +968,6 @@
                             <td class="py-3 px-4 font-semibold text-slate-200">${book.title}</td>
                             <td class="py-3 px-4 text-slate-300">${book.author}</td>
                             <td class="py-3 px-4 font-mono text-slate-400">${book.isbn || 'N/A'}</td>
-                            <td class="py-3 px-4 text-emerald-400">${book.maxPrice ? '$' + book.maxPrice : 'Any'}</td>
                             <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[10px] bg-indigo-950 text-indigo-300 border border-indigo-900">${book.label || 'None'}</span></td>
                             <td class="py-3 px-4 text-right space-x-2">
                                 <button onclick="app.openEditBookModal('${book.id}'); app.closeDesktopCompanionModal();" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs transition">Edit</button>
@@ -1326,7 +1322,6 @@
                             </div>
                             <button onclick="document.getElementById('scan-result-card').classList.add('hidden')" class="text-slate-400 hover:text-slate-200 p-1"><i class="fa-solid fa-xmark text-xs"></i></button>
                         </div>
-                        ${item.matchedDetails && item.matchedDetails.maxPrice ? `<div class="mt-3 pt-3 border-t border-emerald-500/20 flex justify-between items-center text-xs"><span class="text-emerald-300/80">Target Max Price:</span><span class="font-bold text-emerald-300">$${item.matchedDetails.maxPrice}</span></div>` : ''}
                     `;
                 } else {
                     card.className = "mt-4 rounded-2xl p-4 bg-rose-950/60 border border-rose-500/50 shadow-xl shadow-rose-950/40";
@@ -1405,7 +1400,6 @@
                 document.getElementById('form-title').value = '';
                 document.getElementById('form-author').value = '';
                 document.getElementById('form-isbn').value = '';
-                document.getElementById('form-price').value = '';
                 document.getElementById('form-label').value = '';
                 document.getElementById('label-suggestions-dropdown')?.classList.add('hidden');
                 document.getElementById('book-modal')?.classList.remove('hidden');
@@ -1419,7 +1413,6 @@
                 document.getElementById('form-title').value = book.title;
                 document.getElementById('form-author').value = book.author;
                 document.getElementById('form-isbn').value = book.isbn || '';
-                document.getElementById('form-price').value = book.maxPrice || '';
                 document.getElementById('form-label').value = book.label || '';
                 document.getElementById('label-suggestions-dropdown')?.classList.add('hidden');
                 document.getElementById('book-modal')?.classList.remove('hidden');
@@ -1436,7 +1429,6 @@
                 const title = document.getElementById('form-title')?.value.trim();
                 const author = document.getElementById('form-author')?.value.trim();
                 const isbn = document.getElementById('form-isbn')?.value.trim();
-                const maxPrice = document.getElementById('form-price')?.value.trim();
                 const label = document.getElementById('form-label')?.value.trim();
 
                 let workKey = null;
@@ -1459,13 +1451,12 @@
                         book.title = title;
                         book.author = author;
                         book.isbn = isbn;
-                        book.maxPrice = maxPrice;
                         book.label = label;
                         if (workKey) book.workKey = workKey;
                         this.showToast('Book updated');
                     }
                 } else {
-                    this.toBuyList.push({ id: Date.now().toString(), title, author, isbn, maxPrice, label, workKey });
+                    this.toBuyList.push({ id: Date.now().toString(), title, author, isbn, label, workKey });
                     this.showToast('Book added offline');
                 }
                 this.saveData();
@@ -1485,7 +1476,7 @@
                     this.showToast('Already on list', 'warning');
                     return;
                 }
-                this.toBuyList.push({ id: Date.now().toString(), title, author, isbn: isbn !== 'N/A' ? isbn : '', workKey: workKey, maxPrice: '5.00', label: 'General' });
+                this.toBuyList.push({ id: Date.now().toString(), title, author, isbn: isbn !== 'N/A' ? isbn : '', workKey: workKey, label: 'General' });
                 this.saveData();
                 this.showToast(`Added "${title}"!`);
                 this.switchTab('list');
@@ -1508,11 +1499,11 @@
 
             loadPresetList() {
                 this.toBuyList = [
-                    { id: '1', title: 'Dune', author: 'Frank Herbert', isbn: '9780441172719', maxPrice: '5.00', label: 'Sci-Fi' },
-                    { id: '2', title: 'Atomic Habits', author: 'James Clear', isbn: '9780735211292', maxPrice: '8.00', label: 'Self-Help' },
-                    { id: '3', title: 'The Hobbit', author: 'J.R.R. Tolkien', isbn: '9780547928227', maxPrice: '6.00', label: 'Fantasy' },
-                    { id: '4', title: 'Project Hail Mary', author: 'Andy Weir', isbn: '9780593135208', maxPrice: '10.00', label: 'Sci-Fi' },
-                    { id: '5', title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', isbn: '9780374533557', maxPrice: '7.50', label: 'Psychology' }
+                    { id: '1', title: 'Dune', author: 'Frank Herbert', isbn: '9780441172719', label: 'Sci-Fi' },
+                    { id: '2', title: 'Atomic Habits', author: 'James Clear', isbn: '9780735211292', label: 'Self-Help' },
+                    { id: '3', title: 'The Hobbit', author: 'J.R.R. Tolkien', isbn: '9780547928227', label: 'Fantasy' },
+                    { id: '4', title: 'Project Hail Mary', author: 'Andy Weir', isbn: '9780593135208', label: 'Sci-Fi' },
+                    { id: '5', title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', isbn: '9780374533557', label: 'Psychology' }
                 ];
                 this.saveData();
                 this.renderBookList();
@@ -1545,7 +1536,10 @@
                 try {
                     const parsed = JSON.parse(jsonInput);
                     if (Array.isArray(parsed)) {
-                        this.toBuyList = parsed;
+                        this.toBuyList = parsed.map(b => {
+                            const { maxPrice, ...rest } = b;
+                            return rest;
+                        });
                         this.saveData();
                         this.renderBookList();
                         this.showToast('List imported offline!');
@@ -1569,7 +1563,7 @@
             }
 
             promptGenericCsvPaste() {
-                const csvInput = prompt("Paste your CSV spreadsheet text here (with header row like Title, Author, ISBN, MaxPrice, Label):");
+                const csvInput = prompt("Paste your CSV spreadsheet text here (with header row like Title, Author, ISBN, Label):");
                 if (!csvInput) return;
                 this.processCsvText(csvInput);
             }
@@ -1604,7 +1598,6 @@
                     const titleIdx = header.findIndex(h => h.includes('title') || h === 'name');
                     const authorIdx = header.findIndex(h => h.includes('author') || h.includes('writer'));
                     const isbnIdx = header.findIndex(h => h.includes('isbn'));
-                    const priceIdx = header.findIndex(h => h.includes('price') || h.includes('max') || h.includes('cost'));
                     const labelIdx = header.findIndex(h => h.includes('label') || h.includes('category') || h.includes('shelf'));
 
                     if (titleIdx === -1 && authorIdx === -1) {
@@ -1623,8 +1616,7 @@
                         const title = titleIdx !== -1 ? cols[titleIdx] : (cols[0] || '');
                         const author = authorIdx !== -1 ? cols[authorIdx] : (cols[1] || 'Unknown Author');
                         const rawIsbn = isbnIdx !== -1 ? cols[isbnIdx] : (cols[2] || '');
-                        const maxPrice = priceIdx !== -1 ? cols[priceIdx] : (cols[3] || '5.00');
-                        const label = labelIdx !== -1 ? cols[labelIdx] : (cols[4] || 'General');
+                        const label = labelIdx !== -1 ? cols[labelIdx] : (cols[3] || 'General');
                         const cleanIsbn = rawIsbn.replace(/[^0-9X]/gi, '');
 
                         if (title) {
@@ -1647,7 +1639,6 @@
                                     title: title,
                                     author: author || 'Unknown Author',
                                     isbn: cleanIsbn,
-                                    maxPrice: maxPrice.replace(/[^0-9.]/g, '') || '5.00',
                                     label: label || 'General',
                                     workKey: workKey
                                 });
@@ -1748,7 +1739,6 @@
                                     title: title,
                                     author: author,
                                     isbn: cleanIsbn,
-                                    maxPrice: '5.00',
                                     label: 'Goodreads',
                                     workKey: workKey
                                 });
